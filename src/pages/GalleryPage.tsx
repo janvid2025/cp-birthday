@@ -1,24 +1,22 @@
-import { motion } from 'framer-motion';
-import { Heart, Gift } from 'lucide-react';
-import { FloatingHearts } from '@/components/FloatingHearts';
-import { NavigationButton } from '@/components/NavigationButton';
-import { PageTransition } from '@/components/PageTransition';
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Gift } from "lucide-react";
+import { FloatingHearts } from "@/components/FloatingHearts";
+import { NavigationButton } from "@/components/NavigationButton";
+import { PageTransition } from "@/components/PageTransition";
+import { ImageModal } from "@/components/ImageModal";
 
 const GalleryPage = () => {
-  // Placeholder for 33 chocolate letters - replace with actual images
-  const chocolateLetters = Array.from({ length: 33 }, (_, i) => ({
-    id: i + 1,
-    // You'll replace these with actual chocolate letter images
-    placeholder: `Letter ${i + 1}`,
-  }));
+  // Create list of 33 images
+  const images = Array.from({ length: 33 }, (_, i) => `/cp-birthday/chocolates/${i + 1}.jpg`);
+
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   const container = {
     hidden: { opacity: 0 },
     show: {
       opacity: 1,
-      transition: {
-        staggerChildren: 0.05,
-      },
+      transition: { staggerChildren: 0.05 },
     },
   };
 
@@ -32,7 +30,7 @@ const GalleryPage = () => {
       <div className="min-h-screen bg-background py-16 px-4 md:px-8 relative overflow-hidden">
         <FloatingHearts />
 
-        {/* Ambient glow */}
+        {/* Glow */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-primary/5 rounded-full blur-[120px] pointer-events-none" />
 
         <div className="max-w-6xl mx-auto relative z-10">
@@ -48,7 +46,7 @@ const GalleryPage = () => {
               33 Chocolate Letters
             </h1>
             <p className="text-muted-foreground font-inter max-w-md mx-auto">
-              Each one wrapped with a piece of my heart, spelling out how much you mean to me
+              Tap a chocolate to view it closer ❤️
             </p>
           </motion.div>
 
@@ -59,50 +57,48 @@ const GalleryPage = () => {
             animate="show"
             className="grid grid-cols-3 md:grid-cols-6 gap-3 md:gap-4 mb-16"
           >
-            {chocolateLetters.map((letter) => (
+            {images.map((src, index) => (
               <motion.div
-                key={letter.id}
+                key={index}
                 variants={item}
-                whileHover={{ scale: 1.1, y: -5 }}
+                whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="aspect-square bg-card border border-primary/20 rounded-xl overflow-hidden cursor-pointer group relative"
+                className="aspect-square bg-card rounded-xl overflow-hidden cursor-pointer group relative border border-primary/20"
+                onClick={() => setSelectedImage(src)}
               >
-                {/* Placeholder - replace with actual image */}
-                <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/10 to-primary/5">
-                  <Heart className="w-8 h-8 text-primary/40 group-hover:text-primary group-hover:fill-primary transition-all duration-300 group-hover:scale-110" />
-                </div>
-                
-                {/* Hover glow effect */}
-                <div className="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                
+                <img
+                  src={src}
+                  alt={`Letter ${index + 1}`}
+                  className="w-full h-full object-cover group-hover:opacity-90 transition"
+                />
+
                 {/* Number badge */}
-                <div className="absolute bottom-1 right-1 w-6 h-6 bg-background/80 rounded-full flex items-center justify-center">
-                  <span className="text-xs text-muted-foreground font-inter">{letter.id}</span>
+                <div className="absolute bottom-1 right-1 w-6 h-6 bg-background/80 rounded-full flex items-center justify-center shadow">
+                  <span className="text-xs text-muted-foreground font-inter">
+                    {index + 1}
+                  </span>
                 </div>
               </motion.div>
             ))}
           </motion.div>
 
-          {/* Note */}
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 2 }}
-            className="text-center text-muted-foreground/60 font-inter text-sm italic mb-8"
-          >
-            Tap each letter to reveal its message ❤️
-          </motion.p>
-
           {/* Navigation */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 2.2 }}
+            transition={{ delay: 0.5 }}
             className="flex justify-center"
           >
             <NavigationButton to="/moments" label="See Our Moments" variant="minimal" />
           </motion.div>
         </div>
+
+        {/* MODAL PREVIEW */}
+        <AnimatePresence>
+          {selectedImage && (
+            <ImageModal src={selectedImage} onClose={() => setSelectedImage(null)} />
+          )}
+        </AnimatePresence>
       </div>
     </PageTransition>
   );
