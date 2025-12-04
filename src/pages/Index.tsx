@@ -1,4 +1,3 @@
-index.tsx
 import EntrancePage from './EntrancePage';
 
 const Index = () => {
