@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { Heart, ChevronDown } from 'lucide-react';
-import { FloatingHearts } from '@/components/FloatingHearts';
-import { NavigationButton } from '@/components/NavigationButton';
-import { PageTransition } from '@/components/PageTransition';
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import { Heart, ChevronDown } from "lucide-react";
+import { FloatingHearts } from "@/components/FloatingHearts";
+import { NavigationButton } from "@/components/NavigationButton";
+import { PageTransition } from "@/components/PageTransition";
 
 interface TimeLeft {
   days: number;
@@ -21,51 +21,54 @@ const CountdownPage = () => {
     seconds: 0,
   });
 
-  const [isBirthday, setIsBirthday] = useState(false);
+  const [status, setStatus] = useState<"before" | "arrived" | "after">("before");
   const navigate = useNavigate();
 
-  // 🎯 COUNTDOWN TIMER LOGIC
   useEffect(() => {
-    // SET YOUR TARGET DATE HERE
-    const targetDate = new Date('2024-12-04T00:00:00');
+    const targetDate = new Date("2025-12-04T00:00:00"); // your target date
 
-    const calculateTimeLeft = () => {
+    const update = () => {
       const now = new Date();
       const difference = targetDate.getTime() - now.getTime();
 
-      if (difference <= 0) {
-        setIsBirthday(true);
-        return { days: 0, hours: 0, minutes: 0, seconds: 0 };
+      if (difference > 0) {
+        // BEFORE DATE
+        setStatus("before");
+        return {
+          days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+          hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+          minutes: Math.floor((difference / 1000 / 60) % 60),
+          seconds: Math.floor((difference / 1000) % 60),
+        };
       }
 
-      return {
-        days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-        hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
-        minutes: Math.floor((difference / 1000 / 60) % 60),
-        seconds: Math.floor((difference / 1000) % 60),
-      };
+      // ON THE DATE OR AFTER
+      setStatus(difference > -1000 ? "arrived" : "after");
+      return { days: 0, hours: 0, minutes: 0, seconds: 0 };
     };
 
-    setTimeLeft(calculateTimeLeft());
+    setTimeLeft(update());
 
     const timer = setInterval(() => {
-      setTimeLeft(calculateTimeLeft());
+      setTimeLeft(update());
     }, 1000);
 
     return () => clearInterval(timer);
   }, []);
 
-  // 🎉 AUTO-REDIRECT TO ENTRANCE PAGE WHEN DATE IS REACHED
+  // HANDLE BIRTHDAY REDIRECT
   useEffect(() => {
-    if (isBirthday) {
-      const timer = setTimeout(() => {
-        navigate('/entrance');
-      }, 800); // Small delay before redirect
-      return () => clearTimeout(timer);
-    }
-  }, [isBirthday, navigate]);
+    if (status === "arrived" || status === "after") {
+      // play animation for 2 seconds
+      const t = setTimeout(() => {
+        navigate("/entrance");
+      }, 2000);
 
-  // ⏱ SMALL REUSABLE BLOCK
+      return () => clearTimeout(t);
+    }
+  }, [status, navigate]);
+
+  // COMPONENT FOR COUNTDOWN BLOCKS
   const TimeBlock = ({
     value,
     label,
@@ -78,13 +81,13 @@ const CountdownPage = () => {
     <motion.div
       initial={{ opacity: 0, scale: 0.5 }}
       animate={{ opacity: 1, scale: 1 }}
-      transition={{ delay, duration: 0.5, ease: 'easeOut' }}
+      transition={{ delay, duration: 0.5, ease: "easeOut" }}
       className="flex flex-col items-center"
     >
       <div className="relative">
         <div className="w-20 h-20 md:w-28 md:h-28 bg-card border border-primary/30 rounded-2xl flex items-center justify-center animate-glow-pulse">
           <span className="font-playfair text-3xl md:text-5xl font-bold text-foreground">
-            {value.toString().padStart(2, '0')}
+            {value.toString().padStart(2, "0")}
           </span>
         </div>
         <div className="absolute -inset-1 bg-primary/20 rounded-2xl blur-xl -z-10" />
@@ -100,7 +103,7 @@ const CountdownPage = () => {
       <div className="min-h-screen bg-background flex flex-col items-center justify-center relative overflow-hidden px-6">
         <FloatingHearts />
 
-        {/* Ambient glow */}
+        {/* Background Glow */}
         <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[150px] pointer-events-none" />
 
         <div className="relative z-10 text-center">
@@ -113,34 +116,40 @@ const CountdownPage = () => {
           >
             <Heart className="w-10 h-10 text-primary fill-primary mx-auto mb-4 animate-pulse-heart" />
             <h1 className="font-playfair text-2xl md:text-4xl text-foreground mb-2">
-              {isBirthday ? "It's Your Special Day!" : "Counting Down to Your Day"}
+              Countdown to Your Day
             </h1>
             <p className="text-muted-foreground font-inter">
-              {isBirthday ? "Happy Birthday, my love! 🎂" : "December 4th is coming..."}
+              December 4th is coming...
             </p>
           </motion.div>
 
-          {/* Countdown blocks */}
-          {!isBirthday ? (
+          {/* BEFORE DATE → SHOW COUNTDOWN */}
+          {status === "before" && (
             <div className="grid grid-cols-4 gap-3 md:gap-6 mb-16">
               <TimeBlock value={timeLeft.days} label="Days" delay={0.2} />
               <TimeBlock value={timeLeft.hours} label="Hours" delay={0.4} />
               <TimeBlock value={timeLeft.minutes} label="Minutes" delay={0.6} />
               <TimeBlock value={timeLeft.seconds} label="Seconds" delay={0.8} />
             </div>
-          ) : (
+          )}
+
+          {/* ON DATE OR AFTER → SHOW QUICK CELEBRATION ANIMATION */}
+          {(status === "arrived" || status === "after") && (
             <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ duration: 0.8, ease: 'easeOut' }}
+              initial={{ scale: 0.5, opacity: 0 }}
+              animate={{ scale: 1.2, opacity: 1 }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
               className="mb-16"
             >
-              <span className="text-8xl">🎂</span>
+              <span className="text-8xl">🎉</span>
+              <p className="mt-4 text-muted-foreground font-inter">
+                Just a moment...
+              </p>
             </motion.div>
           )}
 
-          {/* Navigation */}
-          {!isBirthday && (
+          {/* ONLY BEFORE DATE → Show Continue button */}
+          {status === "before" && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -151,7 +160,7 @@ const CountdownPage = () => {
           )}
         </div>
 
-        {/* Scroll indicator */}
+        {/* Scroll Indicator */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
