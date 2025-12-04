@@ -15,7 +15,7 @@ const moments = [
   {
     id: 2,
     caption: "A memory I'll cherish forever...",
-     image: "/cp-birthday/moments/2m.png",
+     image: "/cp-birthday/moments/2manother.png",
   },
   {
     id: 3,
