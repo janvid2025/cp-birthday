@@ -11,7 +11,7 @@ const GalleryPage = () => {
 const images = [
   "/cp-birthday/chocolates/1.jpeg",
   "/cp-birthday/chocolates/2.png",
-  "/cp-birthday/chocolates/3.png",
+  "/cp-birthday/chocolates/3.PNG",
   "/cp-birthday/chocolates/4.png.PNG",
   "/cp-birthday/chocolates/5.png.PNG",
   "/cp-birthday/chocolates/6.PNG",
