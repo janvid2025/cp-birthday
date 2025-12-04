@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Heart, ChevronDown } from 'lucide-react';
 import { FloatingHearts } from '@/components/FloatingHearts';
@@ -13,10 +14,19 @@ interface TimeLeft {
 }
 
 const CountdownPage = () => {
-  const [timeLeft, setTimeLeft] = useState<TimeLeft>({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-  const [isBirthday, setIsBirthday] = useState(false);
+  const [timeLeft, setTimeLeft] = useState<TimeLeft>({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  });
 
+  const [isBirthday, setIsBirthday] = useState(false);
+  const navigate = useNavigate();
+
+  // 🎯 COUNTDOWN TIMER LOGIC
   useEffect(() => {
+    // SET YOUR TARGET DATE HERE
     const targetDate = new Date('2024-12-04T00:00:00');
 
     const calculateTimeLeft = () => {
@@ -37,6 +47,7 @@ const CountdownPage = () => {
     };
 
     setTimeLeft(calculateTimeLeft());
+
     const timer = setInterval(() => {
       setTimeLeft(calculateTimeLeft());
     }, 1000);
@@ -44,7 +55,26 @@ const CountdownPage = () => {
     return () => clearInterval(timer);
   }, []);
 
-  const TimeBlock = ({ value, label, delay }: { value: number; label: string; delay: number }) => (
+  // 🎉 AUTO-REDIRECT TO ENTRANCE PAGE WHEN DATE IS REACHED
+  useEffect(() => {
+    if (isBirthday) {
+      const timer = setTimeout(() => {
+        navigate('/entrance');
+      }, 800); // Small delay before redirect
+      return () => clearTimeout(timer);
+    }
+  }, [isBirthday, navigate]);
+
+  // ⏱ SMALL REUSABLE BLOCK
+  const TimeBlock = ({
+    value,
+    label,
+    delay,
+  }: {
+    value: number;
+    label: string;
+    delay: number;
+  }) => (
     <motion.div
       initial={{ opacity: 0, scale: 0.5 }}
       animate={{ opacity: 1, scale: 1 }}
@@ -110,13 +140,15 @@ const CountdownPage = () => {
           )}
 
           {/* Navigation */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.2 }}
-          >
-            <NavigationButton to="/gallery" label="Continue" variant="minimal" />
-          </motion.div>
+          {!isBirthday && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1.2 }}
+            >
+              <NavigationButton to="/gallery" label="Continue" variant="minimal" />
+            </motion.div>
+          )}
         </div>
 
         {/* Scroll indicator */}
