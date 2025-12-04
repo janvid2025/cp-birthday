@@ -10,15 +10,17 @@ const moments = [
   {
     id: 1,
     caption: "Our first moment together...",
-    // Add actual image URL here
+     image: "/cp-birthday/moments/1.jpg",
   },
   {
     id: 2,
     caption: "A memory I'll cherish forever...",
+     image: "/cp-birthday/moments/2.jpg",
   },
   {
     id: 3,
     caption: "You make every moment special...",
+     image: "/cp-birthday/moments/3.jpg",
   },
 ];
 
@@ -67,24 +69,22 @@ const MomentsPage = () => {
           >
             {/* Main photo container */}
             <div className="relative aspect-[4/5] md:aspect-[3/4] bg-card border-2 border-primary/30 rounded-3xl overflow-hidden romantic-glow">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={currentIndex}
-                  initial={{ opacity: 0, x: 100 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -100 }}
-                  transition={{ duration: 0.4 }}
-                  className="absolute inset-0 flex items-center justify-center"
-                >
-                  {/* Placeholder - replace with actual image */}
-                  <div className="w-full h-full bg-gradient-to-br from-primary/10 via-card to-primary/5 flex flex-col items-center justify-center">
-                    <Heart className="w-20 h-20 text-primary/30 mb-4" />
-                    <p className="text-muted-foreground/50 font-inter text-sm">
-                      Photo {currentIndex + 1}
-                    </p>
-                  </div>
-                </motion.div>
-              </AnimatePresence>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentIndex}
+                initial={{ opacity: 0, x: 100 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -100 }}
+                transition={{ duration: 0.4 }}
+                className="absolute inset-0"
+              >
+                <img
+                  src={moments[currentIndex].image}
+                  alt={`Moment ${currentIndex + 1}`}
+                  className="w-full h-full object-cover"
+                />
+              </motion.div>
+            </AnimatePresence>
 
               {/* Caption overlay */}
               <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-background/90 to-transparent p-6">
