@@ -25,7 +25,7 @@ const CountdownPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const targetDate = new Date("2025-12-04T00:00:00"); // your target date
+    const targetDate = new Date("2025-12-05T00:00:00"); // your target date
 
     const update = () => {
       const now = new Date();
