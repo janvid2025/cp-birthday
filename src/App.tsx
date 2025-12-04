@@ -22,7 +22,8 @@ const App = () => (
       <BrowserRouter basename="/cp-birthday">
         <AnimatePresence mode="wait">
           <Routes>
-            <Route path="/" element={<Index />} />
+               <Route path="/" element={<CountdownPage />} />
+              <Route path="/entrance" element={<Index />} />
             <Route path="/countdown" element={<CountdownPage />} />
             <Route path="/gallery" element={<GalleryPage />} />
             <Route path="/moments" element={<MomentsPage />} />
