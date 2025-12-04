@@ -8,7 +8,30 @@ import { ImageModal } from "@/components/ImageModal";
 
 const GalleryPage = () => {
   // Create list of 33 images
-  const images = Array.from({ length: 33 }, (_, i) => `/cp-birthday/chocolates/${i + 1}.jpg`);
+const images = [
+  "/cp-birthday/chocolates/1.jpeg",
+  "/cp-birthday/chocolates/2.png",
+  "/cp-birthday/chocolates/3.png",
+  "/cp-birthday/chocolates/4.png.PNG",
+  "/cp-birthday/chocolates/5.png.PNG",
+  "/cp-birthday/chocolates/6.PNG",
+  "/cp-birthday/chocolates/7.png.PNG",
+  "/cp-birthday/chocolates/8.png.PNG",
+  "/cp-birthday/chocolates/9.png.PNG",
+  "/cp-birthday/chocolates/10.png.PNG",
+  "/cp-birthday/chocolates/11.png.PNG",
+  "/cp-birthday/chocolates/12.png.PNG",
+  "/cp-birthday/chocolates/13.png.PNG",
+  "/cp-birthday/chocolates/14.PNG",
+  "/cp-birthday/chocolates/15.png.PNG",
+  "/cp-birthday/chocolates/16.png.PNG",
+  "/cp-birthday/chocolates/17.png.PNG",
+  "/cp-birthday/chocolates/18.png.PNG",
+  "/cp-birthday/chocolates/19.png.PNG",
+  "/cp-birthday/chocolates/20.PNG",
+  "/cp-birthday/chocolates/21.PNG",
+  "/cp-birthday/chocolates/22.PNG",
+];
 
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
