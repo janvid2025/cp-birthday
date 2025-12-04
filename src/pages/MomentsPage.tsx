@@ -10,17 +10,17 @@ const moments = [
   {
     id: 1,
     caption: "Our first moment together...",
-     image: "/cp-birthday/moments/1.jpg",
+     image: "/cp-birthday/moments/1m.HEIC",
   },
   {
     id: 2,
     caption: "A memory I'll cherish forever...",
-     image: "/cp-birthday/moments/2.jpg",
+     image: "/cp-birthday/moments/2m.png",
   },
   {
     id: 3,
     caption: "You make every moment special...",
-     image: "/cp-birthday/moments/3.jpg",
+     image: "/cp-birthday/moments/3m.JPG",
   },
 ];
 
