@@ -37,7 +37,7 @@ const EntrancePage = () => {
           >
             Happy Birthday,
             <br />
-            <span className="text-gradient-romantic">Chintan</span>
+            <span className="text-gradient-romantic">Chintan Prajapati</span>
             <span className="text-primary"> ❤️</span>
           </motion.h1>
 
@@ -64,7 +64,7 @@ const EntrancePage = () => {
             animate={{ opacity: showButton ? 1 : 0, y: showButton ? 0 : 20 }}
             transition={{ duration: 0.5 }}
           >
-            <NavigationButton to="/countdown" label="Tap to Begin" />
+            <NavigationButton to="/gallery" label="Tap to Begin" />
           </motion.div>
 
           {/* Decorative line */}
