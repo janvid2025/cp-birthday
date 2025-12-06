@@ -11,6 +11,7 @@ import MomentsPage from "./pages/MomentsPage";
 import MessagePage from "./pages/MessagePage";
 import FinalePage from "./pages/FinalePage";
 import NotFound from "./pages/NotFound";
+import { BackgroundMusic } from "@/components/BackgroundMusic";
 
 const queryClient = new QueryClient();
 
@@ -20,6 +21,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter basename="/cp-birthday">
+        <BackgroundMusic />
         <AnimatePresence mode="wait">
           <Routes>
                <Route path="/" element={<CountdownPage />} />
