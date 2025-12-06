@@ -23,7 +23,7 @@ export const BackgroundMusic = () => {
 
   return (
     <audio ref={audioRef} loop>
-      <source src="/cp-birthday/public/music/Ve Haaniyaan.mp3" type="audio/mp3" />
+      <source src="/cp-birthday/music/Ve Haaniyaan.mp3" type="audio/mp3" />
     </audio>
   );
 };
